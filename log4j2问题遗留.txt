@@ -1,0 +1,20 @@
+1.%logger{36}含义： 表示打印日志的路径。{36}表示从当前类开始往上层级机构36层。
+2.<RollingFile name="bomp_error" fileName="../logs/bomp/bomp_error.log"
+                     filePattern="../logs/bomp/$${date:yyyy-MM}/bomp_error-%d{MM-dd-yyyy}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="20M"/>
+            </Policies>
+            <!--目前不做限制，由运维人员定时去清理-->
+            <!--<DefaultRolloverStrategy fileIndex="max" max="5"/>-->
+        </RollingFile>
+上述<Filters></Filters>放到rollingFile下是起作用的。
+3.log4j2中rollingFile进行压缩备份时，生成的文件名-%i，i的值是根据文件生成时间进行定义的。创建时间最早的为1，其次为2，依次类推致max。
+
+上述问题已经进行验证。

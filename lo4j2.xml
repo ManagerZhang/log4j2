@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="60">
+    <Appenders>
+        <RollingFile name="myApp_rolling" fileName="../logs/myApp/myApp_rolling.log"
+                     filePattern="../logs/myApp/$${date:yyyy-MM-dd}/myApp_rolling-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="20M"/>
+            </Policies>
+            <!--最多保存10个备份日志文件-->
+            <!--<DefaultRolloverStrategy fileIndex="max" max="10"/>-->
+        </RollingFile>
+        <RollingFile name="bomp_error" fileName="../logs/myApp/myApp_error.log"
+                     filePattern="../logs/myApp/$${date:yyyy-MM-dd}/myApp_error-%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
+            </PatternLayout>
+            <Filters>
+                <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="20M"/>
+            </Policies>
+            <!--目前不做限制，由运维人员定时去清理-->
+            <!--<DefaultRolloverStrategy fileIndex="max" max="5"/>-->
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <logger name="log4j.logger.druid.sql" level="info" additivity="false">
+            <appender-ref ref="myApp_rolling"/>
+        </logger>
+        <Root level="info">
+            <AppenderRef ref="myApp_rolling"/>
+            <AppenderRef ref="myApp_error"/>
+        </Root>
+    </Loggers>
+</Configuration>
