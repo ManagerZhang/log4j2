@@ -10,7 +10,7 @@
                 <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="20M"/>
             </Policies>
-            <!--最多保存10个备份日志文件-->
+            <!--最多保存10个备份日志文件,如果不配置此标签默认保留7个-->
             <!--<DefaultRolloverStrategy fileIndex="max" max="10"/>-->
         </RollingFile>
         <RollingFile name="bomp_error" fileName="../logs/myApp/myApp_error.log"
